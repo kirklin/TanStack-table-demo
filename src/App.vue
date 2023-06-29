@@ -5,7 +5,7 @@ import {
   getCoreRowModel,
   useVueTable,
 } from "@tanstack/vue-table";
-import { ref } from "vue";
+import { h, ref } from "vue";
 
 interface Person {
   firstName: string;
@@ -51,7 +51,7 @@ const columns = [
     footer: props => props.column.id,
     columns: [
       columnHelper.accessor("firstName", {
-        cell: info => info.getValue(),
+        cell: info => h("div", { style: "color:red" }, info.getValue()),
         footer: props => props.column.id,
       }),
       columnHelper.accessor(row => row.lastName, {
@@ -101,6 +101,7 @@ const table = useVueTable({
   get data() {
     return data.value;
   },
+  debugAll: true,
   columns,
   getCoreRowModel: getCoreRowModel(),
 });
@@ -130,10 +131,11 @@ const table = useVueTable({
       <tbody>
         <tr v-for="row in table.getRowModel().rows" :key="row.id">
           <td v-for="cell in row.getVisibleCells()" :key="cell.id">
-            <FlexRender
-              :render="cell.column.columnDef.cell"
-              :props="cell.getContext()"
-            />
+            <!--            <FlexRender -->
+            <!--              :render="cell.column.columnDef.cell" -->
+            <!--              :props="cell.getContext()" -->
+            <!--            /> -->
+            {{ cell.column.columnDef.cell }}
           </td>
         </tr>
       </tbody>
